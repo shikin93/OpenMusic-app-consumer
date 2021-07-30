@@ -1,13 +1,13 @@
 const { Pool } = require('pg');
 
-class PlaylistService {
+class PlaylistsService {
   constructor() {
     this._pool = new Pool();
   }
 
-  async getPlaylist(userId) {
+  async getPlaylistsongs(userId) {
     const query = {
-      text: 'SELECT playlists.id,playlists.name,users.username FROM playlists JOIN users ON playlists.owner=users.id LEFT JOIN collaborations ON collaborations.playlist_id = playlists.id WHERE playlists.owner = $1 OR collaborations.user_id = $1',
+      text: 'SELECT music.id, music.title, music.performer FROM music LEFT JOIN playlistsongs ON playlistsongs.song_id = music.id LEFT JOIN playlists ON playlists.id = playlistsongs.playlist_id LEFT JOIN collaborations ON collaborations.playlist_id = playlists.id WHERE playlists.owner = $1 OR collaborations.user_id = $1',
       values: [userId],
     };
 
@@ -16,4 +16,4 @@ class PlaylistService {
   }
 }
 
-module.exports = PlaylistService;
+module.exports = PlaylistsService;
